@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bijoux</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <p>Livraison gratuite dès 50 € • Service client 7j/7</p>
+    </div>
+    <nav class="main-nav">
+      <h1 class="logo">Bijouterie</h1>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="#produits">Produits</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#apropos">À&nbsp;propos</a></li>
+        <li><a href="panier.html">Panier</a></li>
+      </ul>
+      <div class="recherche-container">
+        <input type="text" id="recherche" placeholder="Rechercher...">
+        <button onclick="rechercher()">Rechercher</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <aside>
+      <h3>Type de bijoux</h3>
+      <ul class="liste-filtres">
+        <li><button onclick="filtrerParType('tous')">Tous</button></li>
+        <li><button onclick="filtrerParType('or')">Or</button></li>
+        <li><button onclick="filtrerParType('argent')">Argent</button></li>
+        <li><button onclick="filtrerParType('fantaisie')">Fantaisie</button></li>
+      </ul>
+    </aside>
+
+    <main id="produits">
+        <h2 style="text-align:center; margin-bottom: 20px;">Nos bijoux</h2>
+      </main>
+    
+  </div>
+
+  <section id="apropos">
+    <h2>À propos</h2>
+    <p>Notre boutique propose des bijoux faits avec passion, mêlant tradition et modernité. Chaque pièce est sélectionnée avec soin pour sublimer votre beauté.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📧 Email : rh@bijouterie.fr</p>
+    <p>📞 Téléphone : 06 59 00 28 23</p>
+  </section>
+
+  <script src="script.js"></script>
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 Bijoux Élégance. Tous droits réservés.</p>
+      <p>
+        <a href="contact.html">Contact</a> 
+        <a href="mentions.html">Mentions légales</a>
+      </p>
+    </div>
+  </footer>
+  
+</body>
+</html>
+
+
+

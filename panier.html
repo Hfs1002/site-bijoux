@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Panier</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #liste-panier li {
+      list-style: none;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+    #liste-panier img {
+      width: 100px;
+      height: auto;
+      border-radius: 10px;
+    }
+    #total {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    #payer-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #cf9fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #payer-btn:hover {
+      background-color: #bb80ff;
+    }
+    #code-promo-container {
+      margin: 20px 0;
+    }
+    #code-promo {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #appliquer-btn {
+      padding: 8px 12px;
+      background-color: #cf9fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #appliquer-btn:hover {
+      background-color: #bb80ff;
+    }
+    #reduction-info {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mon panier</h1>
+    <nav>
+      <a href="index.html"> Retour à la boutique</a>
+    </nav>
+  </header>
+
+  <main id="contenu-panier">
+    <ul id="liste-panier"></ul>
+    <p id="total"></p>
+
+    <div id="code-promo-container">
+      <input type="text" id="code-promo" placeholder="Code promo">
+      <button id="appliquer-btn" onclick="appliquerCodePromo()">Appliquer</button>
+    </div>
+
+    <p id="reduction-info"></p>
+
+    <a href="paiement.html" class="btn-payer">Valider et payer</a>
+  </main>
+
+  <script>
+    let panier = JSON.parse(localStorage.getItem("panier")) || [];
+    let reduction = 0;
+    let codeApplique = false;
+
+    const ul = document.getElementById("liste-panier");
+    const totalAffichage = document.getElementById("total");
+    const reductionInfo = document.getElementById("reduction-info");
+
+    function afficherPanier() {
+      ul.innerHTML = "";
+      let total = 0;
+
+      if (panier.length === 0) {
+        ul.innerHTML = "<p>Votre panier est vide.</p>";
+        totalAffichage.textContent = "";
+        document.querySelector(".btn-payer").style.display = "none";
+        return;
+      }
+
+      panier.forEach((item, index) => {
+        if (!item.quantite) item.quantite = 1;
+        const li = document.createElement("li");
+        const sousTotal = item.prix * item.quantite;
+        total += sousTotal;
+
+        li.innerHTML = `
+          <img src="${item.image}" alt="${item.nom}">
+          <p><strong>${item.nom}</strong></p>
+          <p>${item.prix} €</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button onclick="changerQuantite(${index}, -1)">➖</button>
+            <span>${item.quantite}</span>
+            <button onclick="changerQuantite(${index}, 1)">➕</button>
+          </div>
+          <p>Sous-total : ${sousTotal} €</p>
+          <button onclick="supprimerDuPanier(${index})" style="background: none; border: none; font-size: 20px; cursor: pointer;"> Supprimer</button>
+          <hr>
+        `;
+        ul.appendChild(li);
+      });
+
+      let totalFinal = total;
+      if (reduction > 0) {
+        totalFinal = (total * (1 - reduction)).toFixed(2);
+        reductionInfo.textContent = `✅ Code promo appliqué : -${reduction * 100}%`;
+      } else {
+        reductionInfo.textContent = "";
+      }
+
+      totalAffichage.textContent = `Total : ${totalFinal} €`;
+      document.querySelector(".btn-payer").style.display = "inline-block";
+    }
+
+    function changerQuantite(index, valeur) {
+      panier[index].quantite += valeur;
+      if (panier[index].quantite < 1) panier[index].quantite = 1;
+      localStorage.setItem("panier", JSON.stringify(panier));
+      afficherPanier();
+    }
+
+    function supprimerDuPanier(index) {
+      panier.splice(index, 1);
+      localStorage.setItem("panier", JSON.stringify(panier));
+      afficherPanier();
+    }
+
+    function appliquerCodePromo() {
+      const code = document.getElementById("code-promo").value.trim().toUpperCase();
+      if (codeApplique) {
+        alert("Un code promo a déjà été appliqué.");
+        return;
+      }
+
+      if (code === "ETE25") {
+        reduction = 0.25;
+        codeApplique = true;
+        afficherPanier();
+      } else {
+        alert("Code promo invalide.");
+      }
+    }
+
+    afficherPanier();
+  </script>
+</body>
+</html>
